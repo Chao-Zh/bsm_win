@@ -7,40 +7,38 @@
 // 功能：程序入口函数
 // 参数：void
 // 返回值：0代表程序正常退出；非0：程序异常
-int main()
-{
+int main() {
 	int choice; // choice表示用户的菜单编号
 
 	printf("\n\n\n\n\n\n\n\n\t\t\t\t\t\t");
-	printf("*欢迎进入收费管理系统*");
+	printf("*Welcome to the Billing Management System*");
 	printf("\n\n\n\n\n\n\n\t\t\t\t\t\t");
 	printf("Press Enter to continue...\n");
-    getchar();
-	#ifdef _WIN32
+	getchar();
+#ifdef _WIN32
 	system("cls"); // Windows 清屏命令
-	#else
+#else
 	system("clear"); // Linux 清屏命令
-	#endif
+#endif
 
 
-	do
-	{
+	do {
 		outputMenu(); // 函数调用，输出系统菜单
 
 		printf("请输入菜单项编号(0--8):"); // 输入提示
-		while(1) {
-            if(scanf("%d", &choice) == 1) {
-                break; // 输入合法则退出验证循环
-            } else {
-                // 清除非数字输入
-                while(getchar() != '\n');
-                printf("你的输入不符合要求，请重新输入:");
-            }
-        }
+		while (1) {
+			if (scanf("%d", &choice) == 1) {
+				break; // 输入合法则退出验证循环
+			}
+			else {
+				// 清除非数字输入
+				while (getchar() != '\n');
+				printf("你的输入不符合要求，请重新输入:");
+			}
+		}
 		printf("\n");
 
-		switch (choice)
-		{
+		switch (choice) {
 		case 1:
 			printf("\t*添加卡*\n\n");
 			add();
