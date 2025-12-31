@@ -5,6 +5,7 @@
 #include "model.h"
 #include "global.h"
 #include "billing_file.h"
+#include "platform_compat.h"
 
 using namespace std;
 

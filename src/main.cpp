@@ -16,9 +16,11 @@ int main()
 	printf("\n\n\n\n\n\n\n\t\t\t\t\t\t");
 	printf("Press Enter to continue...\n");
     getchar();
+	#ifdef _WIN32
+	system("cls"); // Windows 清屏命令
+	#else
 	system("clear"); // Linux 清屏命令
-	//system("pause");
-	//system("cls");此两条语句仅有windows环境下有效
+	#endif
 
 
 	do

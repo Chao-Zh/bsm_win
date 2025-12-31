@@ -13,6 +13,7 @@
 #include "card_service.h"
 #include "global.h"
 #include "tool.h"
+#include "platform_compat.h"
 #include "service.h"
 #include "billing_service.h"
 #include "billing_file.h"
@@ -105,11 +106,10 @@ struct tm tm_start;
 struct tm tm_end;
 
 // 将当前时间转换为本地时间结构体
-if (!localtime_r(&card.tStart, &tm_start)) {
-    perror("时间转换失败");
-    return;
-}
-
+	if (!safe_localtime_r(&card.tStart, &tm_start)) {
+		perror("时间转换失败");
+		return;
+	}
 // 复制时间结构体并增加1年
 tm_end = tm_start;
 tm_end.tm_year += 1;  // tm_year 是自1900的年数
@@ -123,11 +123,10 @@ if (card.tEnd == -1) {
 
 // 验证截止时间
 struct tm tm_check;
-if (!localtime_r(&card.tEnd, &tm_check)) {
-    perror("截止时间转换失败");
-    return;
-}
-
+	if (!safe_localtime_r(&card.tEnd, &tm_check)) {
+		perror("截止时间转换失败");
+		return;
+	}
     // 输出信息
     printf("----------------添加的卡信息如下----------------\n");
 	getLeftAlignFormat(fmt, CARD_NO_WIDTH, "卡号");

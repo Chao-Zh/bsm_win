@@ -10,6 +10,7 @@
 #include "model.h"
 #include "global.h"
 #include "card_file.h"
+#include "platform_compat.h"
 
 using namespace std;
 

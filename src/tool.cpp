@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "platform_compat.h"
 
 // 函数名: timeToString
 // 功能: 将 time_t 时间戳转换为 "年-月-日 时:分" 格式的字符串
@@ -11,7 +12,7 @@ void timeToString(time_t timestamp, char* buffer) {
     struct tm timeinfo = {};  // 栈上分配，无需手动释放
     
     // 使用线程安全版本转换本地时间
-    if (localtime_r(&timestamp, &timeinfo) == nullptr) {
+    if (safe_localtime_r(&timestamp, &timeinfo) == nullptr) {
         // 错误处理
         buffer[0] = '\0';  // 返回空字符串
         return;
