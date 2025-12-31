@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "platform_compat.h"
 
 #include "menu.h"
 
@@ -15,11 +16,7 @@ int main() {
 	printf("\n\n\n\n\n\n\n\t\t\t\t\t\t");
 	printf("Press Enter to continue...\n");
 	getchar();
-#ifdef _WIN32
-	system("cls"); // Windows 清屏命令
-#else
-	system("clear"); // Linux 清屏命令
-#endif
+	system(CLEAR_SCREEN); // 使用平台兼容的清屏命令
 
 
 	do {

@@ -3,6 +3,8 @@
 // 平台兼容性头文件
 // 解决Windows和Linux之间的兼容性问题
 
+#include <time.h>  // 添加time.h头文件以使用localtime_s和localtime_r
+
 #ifdef _WIN32
     // Windows平台定义
     #include <windows.h>

@@ -8,7 +8,7 @@
 - **语言**: C/C++
 - **架构**: 控制台应用程序
 - **数据存储**: 二进制文件存储（.ams格式）
-- **平台**: 跨平台（支持Linux和Windows，但代码中包含了平台特定的清屏命令）
+- **平台**: 跨平台（支持Linux和Windows，包含完整的平台兼容性解决方案）
 
 ## 目录结构
 
@@ -23,6 +23,7 @@ bsm_win/
 │   ├── menu.h             # 菜单界面
 │   ├── model.h            # 数据结构定义
 │   ├── money_file.h       # 资金文件操作
+│   ├── platform_compat.h  # 平台兼容性头文件
 │   ├── service.h          # 核心服务接口
 │   └── tool.h             # 工具函数
 ├── src/               # 源文件目录
@@ -73,6 +74,36 @@ bsm_win/
 - **SettleInfo**: 下机信息结构
 - **Money**: 资金流水结构（充值/退费记录）
 
+## 平台兼容性
+
+### platform_compat.h
+项目提供了完整的平台兼容性头文件 `platform_compat.h`，用于解决Windows和Linux之间的兼容性问题：
+
+1. **清屏命令统一**:
+   - Windows: `CLEAR_SCREEN` 宏定义为 `"cls"`
+   - Linux: `CLEAR_SCREEN` 宏定义为 `"clear"`
+
+2. **时间函数包装**:
+   - 提供了 `safe_localtime_r()` 函数，统一Windows的 `localtime_s` 和Linux的 `localtime_r`
+   - 函数原型: `inline struct tm* safe_localtime_r(const time_t* timer, struct tm* result)`
+
+3. **类型定义**:
+   - 为Windows平台定义了 `__int64_t` 类型
+
+### 当前使用状态
+- **已迁移到新方案的文件**:
+  - `main.cpp`: 使用 `CLEAR_SCREEN` 宏进行清屏
+  - `billing_file.cpp`: 包含 platform_compat.h
+  - `card_file.cpp`: 包含 platform_compat.h
+  - `menu.cpp`: 包含 platform_compat.h，正确使用 `localtime()` 和 `safe_localtime_r()`
+  - `tool.cpp`: 包含 platform_compat.h，使用 `safe_localtime_r`
+
+- **未包含 platform_compat.h 的文件**:
+  - `billing_service.cpp`: 使用 `time(NULL)` 但未使用 localtime 相关函数
+  - `card_service.cpp`: 未使用时间相关函数
+  - `money_file.cpp`: 未使用时间相关函数
+  - `service.cpp`: 使用 `time(NULL)` 但未使用 localtime 相关函数
+
 ## 构建和运行
 
 ### 编译方法
@@ -93,9 +124,8 @@ g++ *.o -o bsm_win
 # 使用g++编译
 g++ -o bsm_win src/*.cpp -Iinclude
 
-# 注意：main.cpp中的清屏命令需要修改
-# system("clear");  # Linux使用
-# system("cls");    # Windows使用
+# 注意：项目已包含完整的平台兼容性解决方案
+# 可以使用统一的 CLEAR_SCREEN 宏和 safe_localtime_r 函数
 ```
 
 ### 运行程序
@@ -130,9 +160,9 @@ bsm_win.exe  # Windows
 ## 已知问题与注意事项
 
 1. **平台兼容性**:
-   - `main.cpp` 中的清屏命令需要根据平台调整
-   - Linux: `system("clear")`
-   - Windows: `system("cls")`
+   - 项目已添加 `platform_compat.h` 解决平台兼容性问题
+   - `main.cpp` 迁移到新的平台兼容性方案，使用 `CLEAR_SCREEN` 宏
+   - 大部分源文件已包含 platform_compat.h
 
 2. **输入验证**:
    - 菜单选择有基本的输入验证
@@ -141,26 +171,6 @@ bsm_win.exe  # Windows
 3. **内存管理**:
    - 使用链表存储数据，需要正确释放内存
    - `releaseList()` 函数用于释放链表内存
-
-## 扩展建议
-
-1. **添加构建系统**:
-   - 创建 `CMakeLists.txt` 或 `Makefile` 简化编译过程
-   - 支持跨平台构建
-
-2. **改进用户界面**:
-   - 可以考虑使用ncurses库改进控制台界面
-   - 添加颜色和更好的布局
-
-3. **增强功能**:
-   - 添加数据备份和恢复功能
-   - 实现数据导出（CSV/Excel格式）
-   - 添加用户权限管理
-
-4. **代码现代化**:
-   - 考虑使用C++标准库替代部分C风格代码
-   - 添加异常处理机制
-   - 使用智能指针管理内存
 
 ## 快速开始
 
@@ -180,5 +190,5 @@ bsm_win.exe  # Windows
 
 ---
 
-*本文档最后更新: 2025-12-31*  
-*项目状态: 功能完整，可运行的控制台应用程序*
+*本文档最后更新: 2025-12-31*
+*项目状态: 功能完整，包含完整平台兼容性解决方案的控制台应用程序*
