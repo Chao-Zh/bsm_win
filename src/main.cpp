@@ -10,7 +10,7 @@
 int main() {
 	int choice; // choice表示用户的菜单编号
 
-	printf("\n\n\n\n\n\n\n\n\t\t\t\t\t\t");
+	printf("\n\n\n\n\n\n\n\n\t\t\t\t\t");
 	printf("*Welcome to the Billing Management System*");
 	printf("\n\n\n\n\n\n\n\t\t\t\t\t\t");
 	printf("Press Enter to continue...\n");
